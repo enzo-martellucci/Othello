@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
+<?import javafx.scene.control.Spinner?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
+<?import javafx.scene.layout.ColumnConstraints?>
+<?import javafx.scene.layout.GridPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.RowConstraints?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.shape.Circle?>
+<?import javafx.scene.text.Font?>
+
+<VBox alignment="CENTER" minHeight="700.0" minWidth="1200.0" spacing="40.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.othello.controller.ConfigurationController">
+    <padding>
+        <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
+    </padding>
+    <HBox>
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Black Player">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <HBox alignment="CENTER" spacing="50.0">
+                      <Circle radius="80.0" stroke="#9a9a9a" strokeType="INSIDE" strokeWidth="3.0" />
+                      <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                              <toggleGroup>
+                                  <ToggleGroup fx:id="tgBlackPlayer" />
+                              </toggleGroup>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgBlackPlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgBlackPlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgBlackPlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                      </VBox>
+                  </HBox>
+            </children>
+         </VBox>
+         <VBox fx:id="boxBlackStrategy" prefHeight="200.0" prefWidth="100.0" visible="false">
+            <children>
+                  <Separator>
+                      <VBox.margin>
+                          <Insets bottom="10.0" top="25.0" />
+                      </VBox.margin>
+                  </Separator>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Strategy">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <GridPane hgap="10.0" vgap="10.0">
+                      <columnConstraints>
+                          <ColumnConstraints hgrow="SOMETIMES" />
+                          <ColumnConstraints hgrow="SOMETIMES" />
+                      </columnConstraints>
+                      <rowConstraints>
+                          <RowConstraints vgrow="SOMETIMES" />
+                          <RowConstraints vgrow="SOMETIMES" />
+                      </rowConstraints>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="tgBlackStrategy" />
+                     </toggleGroup>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgBlackStrategy" GridPane.rowIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                  </GridPane>
+            </children>
+         </VBox>
+         <VBox fx:id="boxBlackLimit" prefHeight="200.0" prefWidth="100.0" visible="false">
+            <children>
+                  <Separator>
+                      <VBox.margin>
+                          <Insets bottom="10.0" top="25.0" />
+                      </VBox.margin>
+                  </Separator>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Limit">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                      <HBox spacing="10.0" HBox.hgrow="ALWAYS">
+                          <Spinner fx:id="spBlackLimitMS" editable="true" />
+                          <Label text="ms">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                          </Label>
+                          <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
+                          <Spinner fx:id="spBlackLimitStep" editable="true" />
+                          <Label text="steps">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                          </Label>
+                      </HBox>
+                  </HBox>
+            </children>
+         </VBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+        </VBox>
+        <Separator orientation="VERTICAL" prefHeight="200.0" />
+        <VBox alignment="TOP_CENTER" prefHeight="200.0" prefWidth="100.0" HBox.hgrow="ALWAYS">
+         <VBox prefHeight="200.0" prefWidth="100.0">
+            <children>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="White Player">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <HBox alignment="CENTER" spacing="50.0">
+                      <Circle fill="WHITE" radius="80.0" stroke="#9a9a9a" strokeType="INSIDE" strokeWidth="3.0" />
+                      <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                        <toggleGroup>
+                           <ToggleGroup fx:id="tgWhitePlayer" />
+                        </toggleGroup>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgWhitePlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgWhitePlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgWhitePlayer">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                              <padding>
+                                  <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                              </padding>
+                          </ToggleButton>
+                      </VBox>
+                  </HBox>
+            </children>
+         </VBox>
+         <VBox fx:id="boxWhiteStrategy" prefHeight="200.0" prefWidth="100.0" visible="false">
+            <children>
+                  <Separator>
+                      <VBox.margin>
+                          <Insets bottom="10.0" top="25.0" />
+                      </VBox.margin>
+                  </Separator>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Strategy">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <GridPane hgap="10.0" vgap="10.0">
+                      <columnConstraints>
+                          <ColumnConstraints hgrow="SOMETIMES" />
+                          <ColumnConstraints hgrow="SOMETIMES" />
+                      </columnConstraints>
+                      <rowConstraints>
+                          <RowConstraints vgrow="SOMETIMES" />
+                          <RowConstraints vgrow="SOMETIMES" />
+                      </rowConstraints>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                     <toggleGroup>
+                        <ToggleGroup fx:id="tgWhiteStrategy" />
+                     </toggleGroup>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgWhiteStrategy" GridPane.rowIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                          <font>
+                              <Font size="18.0" />
+                          </font>
+                          <padding>
+                              <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
+                          </padding>
+                      </ToggleButton>
+                  </GridPane>
+            </children>
+         </VBox>
+         <VBox fx:id="boxWhiteLimit" prefHeight="200.0" prefWidth="100.0" visible="false">
+            <children>
+                  <Separator>
+                      <VBox.margin>
+                          <Insets bottom="10.0" top="25.0" />
+                      </VBox.margin>
+                  </Separator>
+                  <Label alignment="CENTER" maxWidth="1.7976931348623157E308" text="Limit">
+                      <font>
+                          <Font name="System Bold" size="24.0" />
+                      </font>
+                      <VBox.margin>
+                          <Insets bottom="20.0" />
+                      </VBox.margin>
+                  </Label>
+                  <HBox prefHeight="100.0" prefWidth="200.0">
+                      <HBox spacing="10.0" HBox.hgrow="ALWAYS">
+                          <Spinner fx:id="spWhiteLimitMS" editable="true" />
+                          <Label text="ms">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                          </Label>
+                          <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
+                          <Spinner fx:id="spWhiteLimitStep" editable="true" />
+                          <Label text="steps">
+                              <font>
+                                  <Font size="18.0" />
+                              </font>
+                          </Label>
+                      </HBox>
+                  </HBox>
+            </children>
+         </VBox>
+         <padding>
+            <Insets bottom="10.0" left="10.0" right="10.0" top="10.0" />
+         </padding>
+        </VBox>
+    </HBox>
+    <Button mnemonicParsing="false" onAction="#handleStart" text="Start">
+        <font>
+            <Font name="System Bold" size="36.0" />
+        </font>
+    </Button>
+</VBox>
