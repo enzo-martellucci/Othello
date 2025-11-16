@@ -1,20 +1,23 @@
 package com.insa.othello.ai.strategy;
 
-import com.insa.othello.model.Position;
+import com.insa.othello.constant.Cell;
+import com.insa.othello.model.Board;
 
-import java.util.List;
-
-/**
- * Stratégie absolue pour Othello.
- * Évalue un coup simplement par le nombre de pions retournés.
- *
- * C'est la stratégie la plus simple : maximiser le nombre de pions captés.
- */
 public class AbsoluteStrategy implements EvaluationStrategy {
 
     @Override
-    public int evaluate(Position position, List<Position> flippedPieces) {
-        // Score = nombre de pions retournés + 1 pour le pion placé
-        return flippedPieces.size() + 1;
+    public int evaluate(Board board) {
+        Cell[][] grid = board.getGrid();
+        int score = 0;
+
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (grid[i][j] == Cell.BLACK)
+                    score++;
+                else if (grid[i][j] == Cell.WHITE)
+                    score--;
+
+        return score;
     }
 }
+ 

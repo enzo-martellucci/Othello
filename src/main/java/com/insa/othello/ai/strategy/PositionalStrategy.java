@@ -1,42 +1,31 @@
 package com.insa.othello.ai.strategy;
 
-import com.insa.othello.model.Position;
+import com.insa.othello.constant.Cell;
+import com.insa.othello.model.Board;
 
-import java.util.List;
-
-/**
- * Stratégie positionnelle pour Othello.
- * Évalue la qualité d'un coup basée sur la position sur le plateau.
- *
- * Les coins sont très précieux (+ valeur importante)
- * Les bords proches des coins sont dangereux (- valeur)
- * Le centre est moins intéressant
- */
 public class PositionalStrategy implements EvaluationStrategy {
-    // Table de valeurs positionnelles (8x8)
-    // Les coins valent 100, les positions à éviter près des coins valent -20, etc.
     private static final int[][] BOARD_VALUE = {
-            {100, -20, 10,  5,  5, 10, -20, 100},
+            {100, -20, 10, 5, 5, 10, -20, 100},
             {-20, -50, -2, -2, -2, -2, -50, -20},
-            { 10,  -2,  1,  1,  1,  1,  -2,  10},
-            {  5,  -2,  1,  1,  1,  1,  -2,   5},
-            {  5,  -2,  1,  1,  1,  1,  -2,   5},
-            { 10,  -2,  1,  1,  1,  1,  -2,  10},
+            {10, -2, 1, 1, 1, 1, -2, 10},
+            {5, -2, 1, 1, 1, 1, -2, 5},
+            {5, -2, 1, 1, 1, 1, -2, 5},
+            {10, -2, 1, 1, 1, 1, -2, 10},
             {-20, -50, -2, -2, -2, -2, -50, -20},
-            {100, -20, 10,  5,  5, 10, -20, 100}
+            {100, -20, 10, 5, 5, 10, -20, 100}
     };
 
     @Override
-    public int evaluate(Position position, List<Position> flippedPieces) {
+    public int evaluate(Board board) {
+        Cell[][] grid = board.getGrid();
         int score = 0;
 
-        // Score de la position du coup
-        score += BOARD_VALUE[position.r()][position.c()];
-
-        // Score basé sur les pions retournés
-        for (Position flipped : flippedPieces) {
-            score += BOARD_VALUE[flipped.r()][flipped.c()];
-        }
+        for (int i = 0; i < 8; i++)
+            for (int j = 0; j < 8; j++)
+                if (grid[i][j] == Cell.BLACK)
+                    score += BOARD_VALUE[i][j];
+                else if (grid[i][j] == Cell.WHITE)
+                    score -= BOARD_VALUE[i][j];
 
         return score;
     }

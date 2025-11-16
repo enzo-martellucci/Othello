@@ -1,29 +1,22 @@
 package com.insa.othello.ai.strategy;
 
-import com.insa.othello.model.Position;
+import com.insa.othello.constant.Cell;
+import com.insa.othello.model.Board;
 
-import java.util.List;
-
-/**
- * Stratégie mixte pour Othello.
- * Combine les avantages des stratégies Positional, Absolute et Mobile.
- *
- * - 50% Positional (importance de la position sur le plateau)
- * - 30% Absolute (nombre de pions captés)
- * - 20% Mobile (impact sur la flexibilité)
- */
 public class MixteStrategy implements EvaluationStrategy {
     private final PositionalStrategy positional = new PositionalStrategy();
     private final AbsoluteStrategy absolute = new AbsoluteStrategy();
     private final MobileStrategy mobile = new MobileStrategy();
 
     @Override
-    public int evaluate(Position position, List<Position> flippedPieces) {
-        int positionalScore = positional.evaluate(position, flippedPieces);
-        int absoluteScore = absolute.evaluate(position, flippedPieces);
-        int mobileScore = mobile.evaluate(position, flippedPieces);
+    public int evaluate(Board board) {
+        int nbMove = board.getNbMove();
 
-        // Pondération : 50% position, 30% absolu, 20% mobilité
-        return (int) (positionalScore * 0.5 + absoluteScore * 0.3 + mobileScore * 0.2);
+        if (nbMove <= 25)
+            return positional.evaluate(board);
+        else if (nbMove >= 48)
+            return absolute.evaluate(board);
+        else
+            return mobile.evaluate(board);
     }
 }
