@@ -26,8 +26,8 @@ public class Game {
         this.controller = controller;
         this.board = new Board();
 
-        this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy(), 2);
-        this.passivePlayer = new Player(WHITE, configuration.whitePlayer(), configuration.whiteStrategy(), 2);
+        this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy(), configuration.blackLimitStep(), 2);
+        this.passivePlayer = new Player(WHITE, configuration.whitePlayer(), configuration.whiteStrategy(), configuration.whiteLimitStep(), 2);
 
         this.init();
     }
@@ -45,7 +45,7 @@ public class Game {
 
         this.isAIPlaying = this.activePlayer.isAI();
         if (this.isAIPlaying)
-            this.activePlayer.playAI(this.board.getMapMove(), this::playAI);
+            this.activePlayer.playAI(this.board, this.board.getMapMove(), this::playAI);
     }
 
     public Board getBoard() {
@@ -84,7 +84,7 @@ public class Game {
         this.nextTurn();
 
         if (!this.isOver && this.activePlayer.isAI())
-            this.activePlayer.playAI(this.board.getMapMove(), this::playAI);
+            this.activePlayer.playAI(this.board, this.board.getMapMove(), this::playAI);
     }
 
     public void playAI(Position p) {

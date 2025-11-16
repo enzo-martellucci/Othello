@@ -3,7 +3,9 @@
     "allow": [
       "Bash(mvn clean compile:*)",
       "Bash(./mvnw clean:*)",
-      "Bash(timeout 30 ./mvnw:*)"
+      "Bash(timeout 30 ./mvnw:*)",
+      "Bash(./mvnw test:*)",
+      "Bash(git add:*)"
     ],
     "deny": [],
     "ask": []

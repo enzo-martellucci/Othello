@@ -1,7 +1,7 @@
 package com.insa.othello.model;
 
 import com.insa.othello.ai.AI;
-import com.insa.othello.ai.RandomAI;
+import com.insa.othello.ai.AIFactory;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
@@ -18,10 +18,10 @@ public class Player {
     private final AI ai;
     private int score;
 
-    public Player(Cell color, PlayerType type, StrategyType strategy, int score) {
+    public Player(Cell color, PlayerType type, StrategyType strategy, int maxDepth, int score) {
         this.color = color;
         this.type = type;
-        this.ai = type == HUMAN ? null : new RandomAI();
+        this.ai = AIFactory.createAI(type, strategy, maxDepth, color);
         this.score = score;
     }
 
@@ -45,7 +45,7 @@ public class Player {
         this.score = score;
     }
 
-    public void playAI(Map<Position, List<Position>> mapMove, Consumer<Position> callback) {
-        this.ai.search(mapMove, callback);
+    public void playAI(Board board, Map<Position, List<Position>> mapMove, Consumer<Position> callback) {
+        this.ai.search(board, mapMove, callback);
     }
 }
