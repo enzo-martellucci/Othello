@@ -1,5 +1,7 @@
-package com.insa.othello.ai;
+package com.insa.othello.ai.algorithm;
 
+import com.insa.othello.ai.AbstractAI;
+import com.insa.othello.ai.strategy.EvaluationStrategy;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.model.Board;
 import com.insa.othello.model.Position;

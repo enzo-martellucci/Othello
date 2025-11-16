@@ -1,6 +1,5 @@
-package com.insa.othello.ai;
+package com.insa.othello.ai.strategy;
 
-import com.insa.othello.constant.Configuration;
 import com.insa.othello.model.Position;
 
 import java.util.List;

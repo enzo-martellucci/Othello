@@ -1,4 +1,4 @@
-package com.insa.othello.ai;
+package com.insa.othello.ai.strategy;
 
 import com.insa.othello.model.Position;
 

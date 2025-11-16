@@ -1,5 +1,13 @@
 package com.insa.othello.ai;
 
+import com.insa.othello.ai.algorithm.AlphaBetaAI;
+import com.insa.othello.ai.algorithm.MinMaxAI;
+import com.insa.othello.ai.strategy.AbsoluteStrategy;
+import com.insa.othello.ai.strategy.EvaluationStrategy;
+import com.insa.othello.ai.strategy.MixteStrategy;
+import com.insa.othello.ai.strategy.MobileStrategy;
+import com.insa.othello.ai.strategy.PositionalStrategy;
+import com.insa.othello.ai.strategy.StrategyFactory;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
