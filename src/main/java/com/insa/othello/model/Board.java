@@ -20,7 +20,7 @@ public class Board {
         this.mapMove = new HashMap<>();
     }
 
-    public void init(Cell color) {
+    public void init() {
         for (int i = 0; i < SIZE; i++)
             for (int j = 0; j < SIZE; j++)
                 grid[i][j] = EMPTY;
@@ -37,12 +37,23 @@ public class Board {
         return this.grid;
     }
 
-    public Cell getCell(int row, int col) {
-        return this.grid[row][col];
+    public Map<Position, List<Position>> getMapMove() {
+        return this.mapMove;
     }
 
     public boolean isPlayable() {
         return !this.mapMove.isEmpty();
+    }
+
+    public int play(int row, int col, Cell color) {
+        this.grid[row][col] = color;
+
+        Position position = new Position(row, col);
+        int scored = this.mapMove.get(position).size();
+        this.mapMove.get(position).forEach(p -> this.grid[p.r()][p.c()] = color);
+        this.mapMove.remove(position);
+
+        return scored;
     }
 
     public void updatePossiblePlay(Cell color) {
@@ -92,16 +103,5 @@ public class Board {
         }
 
         return lstFlipped;
-    }
-
-    public int play(int row, int col, Cell color) {
-        this.grid[row][col] = color;
-
-        Position position = new Position(row, col);
-        int scored = this.mapMove.get(position).size();
-        this.mapMove.get(position).forEach(p -> this.grid[p.r()][p.c()] = color);
-        this.mapMove.remove(position);
-
-        return scored;
     }
 }

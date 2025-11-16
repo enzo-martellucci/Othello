@@ -1,6 +1,8 @@
 package com.insa.othello.model;
 
 import com.insa.othello.constant.Message;
+import com.insa.othello.controller.GameController;
+import javafx.application.Platform;
 
 import static com.insa.othello.constant.Cell.BLACK;
 import static com.insa.othello.constant.Cell.WHITE;
@@ -8,14 +10,20 @@ import static com.insa.othello.constant.Message.BLACK_TURN;
 import static com.insa.othello.constant.Message.WHITE_TURN;
 
 public class Game {
+    private final GameController controller;
+
     private final Board board;
+
     private Player activePlayer;
     private Player passivePlayer;
 
     private Message message;
     private boolean isOver;
 
-    public Game(GameConfiguration configuration) {
+    private boolean isAIPlaying;
+
+    public Game(GameConfiguration configuration, GameController controller) {
+        this.controller = controller;
         this.board = new Board();
 
         this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy(), 2);
@@ -31,9 +39,13 @@ public class Game {
         this.activePlayer.setScore(2);
         this.passivePlayer.setScore(2);
 
-        this.board.init(this.activePlayer.getColor());
+        this.board.init();
         this.board.updatePossiblePlay(this.activePlayer.getColor());
         this.message = BLACK_TURN;
+
+        this.isAIPlaying = this.activePlayer.isAI();
+        if (this.isAIPlaying)
+            this.activePlayer.playAI(this.board.getMapMove(), this::playAI);
     }
 
     public Board getBoard() {
@@ -64,23 +76,36 @@ public class Game {
         return this.isOver;
     }
 
-    public void play(int r, int c) {
-        int scored = this.board.play(r, c, this.activePlayer.getColor());
+    public void play(Position p) {
+        int scored = this.board.play(p.r(), p.c(), this.activePlayer.getColor());
         this.activePlayer.setScore(this.activePlayer.getScore() + scored + 1);
         this.passivePlayer.setScore(this.passivePlayer.getScore() - scored);
+
+        this.nextTurn();
+
+        if (!this.isOver && this.activePlayer.isAI())
+            this.activePlayer.playAI(this.board.getMapMove(), this::playAI);
+    }
+
+    public void playAI(Position p) {
+        Platform.runLater(() -> {
+            this.isAIPlaying = false;
+            this.play(p);
+            this.controller.updateUI();
+        });
+    }
+
+    private void nextTurn() {
         this.switchPlayer();
         this.board.updatePossiblePlay(this.activePlayer.getColor());
-
-        if (!this.board.isPlayable()) {
-            this.switchPlayer();
-            this.board.updatePossiblePlay(this.activePlayer.getColor());
-        }
-
-        if (!this.board.isPlayable())
-            this.isOver = true;
-        else
+        if (this.board.isPlayable())
+            return;
+        this.switchPlayer();
+        this.board.updatePossiblePlay(this.activePlayer.getColor());
+        if (this.board.isPlayable())
             return;
 
+        this.isOver = true;
         if (this.getBlackPlayer().getScore() > this.getWhitePlayer().getScore())
             this.message = Message.BLACK_WIN;
         else if (this.getWhitePlayer().getScore() > this.getBlackPlayer().getScore())

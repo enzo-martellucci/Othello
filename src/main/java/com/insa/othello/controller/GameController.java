@@ -5,6 +5,7 @@ import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
 import com.insa.othello.model.Game;
 import com.insa.othello.model.GameConfiguration;
+import com.insa.othello.model.Position;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -54,7 +55,7 @@ public class GameController implements Initializable {
     }
 
     public void start(GameConfiguration gameConfiguration) {
-        this.game = new Game(gameConfiguration);
+        this.game = new Game(gameConfiguration, this);
         this.gameConfiguration = gameConfiguration;
 
         this.updateUI();
@@ -67,7 +68,7 @@ public class GameController implements Initializable {
     }
 
     public void play(int row, int col) {
-        this.game.play(row, col);
+        this.game.play(new Position(row, col));
         this.updateUI();
     }
 
@@ -80,7 +81,7 @@ public class GameController implements Initializable {
         SceneController.getInstance().configure(this.gameConfiguration);
     }
 
-    private void updateUI() {
+    public void updateUI() {
         Cell[][] grid = this.game.getBoard().getGrid();
 
         for (int r = 0; r < grid.length; r++)

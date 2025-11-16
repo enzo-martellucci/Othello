@@ -1,33 +1,80 @@
 package com.insa.othello.ai;
 
-import com.insa.othello.constant.Cell;
-import com.insa.othello.model.Board;
-import com.insa.othello.model.Move;
+import com.insa.othello.model.Position;
+import javafx.concurrent.Service;
+import javafx.concurrent.Task;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
+import java.util.function.Consumer;
 
-/**
- * Implémentation IA basique qui joue des coups aléatoires
- * Utilisée pour les tests et comme base pour les stratégies plus avancées
- */
-public class RandomAI implements AI {
-    private Random random;
+public class RandomAI extends Service<Position> implements AI {
+    private final Random random;
+
+    private Map<Position, List<Position>> mapMove;
+    private Consumer<Position> callback;
 
     public RandomAI() {
         this.random = new Random();
+
+        this.setOnFailed(event -> {
+            Throwable exception = getException();
+            System.err.println("Erreur dans l'IA: " + exception.getMessage());
+            exception.printStackTrace();
+        });
     }
 
-    /**
-     * Choisit un coup aléatoire parmi les coups valides disponibles
-     */
+    public void search(Map<Position, List<Position>> mapMove, Consumer<Position> callback) {
+        this.mapMove = mapMove;
+
+        this.setOnSucceeded(_ -> callback.accept(this.getValue()));
+
+        if (this.getState() == State.READY) {
+            this.start();
+        } else {
+            this.restart();
+        }
+    }
+
     @Override
-    public Move chooseMove(Board board, Cell player, List<Move> availableMoves) {
-        if (availableMoves == null || availableMoves.isEmpty()) {
-            throw new IllegalArgumentException("Aucun coup disponible");
+    protected Task<Position> createTask() {
+        final Map<Position, List<Position>> currentMapMove = this.mapMove;
+
+        return new Task<>() {
+            @Override
+            protected Position call() throws Exception {
+                if (isCancelled()) {
+                    return null;
+                }
+
+                List<Position> lstMove = new ArrayList<>(currentMapMove.keySet());
+
+                if (lstMove.isEmpty()) {
+                    throw new IllegalStateException("Aucun coup possible");
+                }
+
+                Position move = lstMove.get(random.nextInt(lstMove.size()));
+
+                // Simulation de réflexion
+                Thread.sleep(random.nextInt(1000));
+
+                return move;
+            }
+        };
+    }
+
+    private Position compute() {
+        List<Position> lstMove = new ArrayList<>(this.mapMove.keySet());
+        Position move = lstMove.get(this.random.nextInt(lstMove.size()));
+
+        try {
+            Thread.sleep(this.random.nextInt(1000));
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
         }
 
-        // Choisir un coup aléatoire
-        return availableMoves.get(random.nextInt(availableMoves.size()));
+        return move;
     }
 }
