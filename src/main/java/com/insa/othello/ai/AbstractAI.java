@@ -3,7 +3,6 @@ package com.insa.othello.ai;
 import com.insa.othello.ai.algorithm.AlphaBetaAI;
 import com.insa.othello.ai.algorithm.MinMaxAI;
 import com.insa.othello.ai.strategy.EvaluationStrategy;
-import com.insa.othello.ai.strategy.StrategyFactory;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
@@ -87,7 +86,7 @@ public abstract class AbstractAI extends Service<Position> implements AI {
             return null;
         }
 
-        EvaluationStrategy strategy = StrategyFactory.createStrategy(strategyType);
+        EvaluationStrategy strategy = EvaluationStrategy.create(strategyType);
 
         return switch (playerType) {
             case MIN_MAX -> new MinMaxAI(strategy, maxDepth, playerColor);

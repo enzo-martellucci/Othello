@@ -1,5 +1,6 @@
 package com.insa.othello.ai.strategy;
 
+import com.insa.othello.constant.StrategyType;
 import com.insa.othello.model.Position;
 
 import java.util.List;
@@ -17,4 +18,19 @@ public interface EvaluationStrategy {
      * @return Score d'évaluation du coup
      */
     int evaluate(Position position, List<Position> flippedPieces);
+
+    /**
+     * Crée une stratégie d'évaluation selon le type sélectionné.
+     *
+     * @param type Le type de stratégie à créer
+     * @return Une instance de la stratégie demandée
+     */
+    static EvaluationStrategy create(StrategyType type) {
+        return switch (type) {
+            case POSITIONAL -> new PositionalStrategy();
+            case ABSOLUTE -> new AbsoluteStrategy();
+            case MOBILE -> new MobileStrategy();
+            case MIXTE -> new MixteStrategy();
+        };
+    }
 }

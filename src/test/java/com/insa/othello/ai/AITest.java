@@ -7,7 +7,6 @@ import com.insa.othello.ai.strategy.EvaluationStrategy;
 import com.insa.othello.ai.strategy.MixteStrategy;
 import com.insa.othello.ai.strategy.MobileStrategy;
 import com.insa.othello.ai.strategy.PositionalStrategy;
-import com.insa.othello.ai.strategy.StrategyFactory;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
@@ -44,19 +43,19 @@ public class AITest {
 
     @Test
     public void testStrategyFactory() {
-        EvaluationStrategy positional = StrategyFactory.createStrategy(StrategyType.POSITIONAL);
+        EvaluationStrategy positional = EvaluationStrategy.create(StrategyType.POSITIONAL);
         assertNotNull(positional, "PositionalStrategy should not be null");
         assertTrue(positional instanceof PositionalStrategy);
 
-        EvaluationStrategy absolute = StrategyFactory.createStrategy(StrategyType.ABSOLUTE);
+        EvaluationStrategy absolute = EvaluationStrategy.create(StrategyType.ABSOLUTE);
         assertNotNull(absolute, "AbsoluteStrategy should not be null");
         assertTrue(absolute instanceof AbsoluteStrategy);
 
-        EvaluationStrategy mobile = StrategyFactory.createStrategy(StrategyType.MOBILE);
+        EvaluationStrategy mobile = EvaluationStrategy.create(StrategyType.MOBILE);
         assertNotNull(mobile, "MobileStrategy should not be null");
         assertTrue(mobile instanceof MobileStrategy);
 
-        EvaluationStrategy mixte = StrategyFactory.createStrategy(StrategyType.MIXTE);
+        EvaluationStrategy mixte = EvaluationStrategy.create(StrategyType.MIXTE);
         assertNotNull(mixte, "MixteStrategy should not be null");
         assertTrue(mixte instanceof MixteStrategy);
     }
