@@ -15,14 +15,14 @@ public class AITest {
 
     @Test
     public void testMinMaxAICreation() {
-        AI minMaxAI = AIFactory.createAI(PlayerType.MIN_MAX, StrategyType.POSITIONAL, 3, Cell.WHITE);
+        AI minMaxAI = AbstractAI.createAI(PlayerType.MIN_MAX, StrategyType.POSITIONAL, 3, Cell.WHITE);
         assertNotNull(minMaxAI, "MinMaxAI should not be null");
         assertTrue(minMaxAI instanceof MinMaxAI, "Should create MinMaxAI instance");
     }
 
     @Test
     public void testAlphaBetaAICreation() {
-        AI alphaBetaAI = AIFactory.createAI(PlayerType.MIN_MAX_ALPHA_BETA, StrategyType.ABSOLUTE, 3, Cell.BLACK);
+        AI alphaBetaAI = AbstractAI.createAI(PlayerType.MIN_MAX_ALPHA_BETA, StrategyType.ABSOLUTE, 3, Cell.BLACK);
         assertNotNull(alphaBetaAI, "AlphaBetaAI should not be null");
         assertTrue(alphaBetaAI instanceof AlphaBetaAI, "Should create AlphaBetaAI instance");
     }
@@ -107,7 +107,7 @@ public class AITest {
 
     @Test
     public void testHumanPlayerReturnsNull() {
-        AI humanAI = AIFactory.createAI(PlayerType.HUMAN, StrategyType.ABSOLUTE, 3, Cell.BLACK);
+        AI humanAI = AbstractAI.createAI(PlayerType.HUMAN, StrategyType.ABSOLUTE, 3, Cell.BLACK);
         assertNull(humanAI, "Human player should return null AI");
     }
 

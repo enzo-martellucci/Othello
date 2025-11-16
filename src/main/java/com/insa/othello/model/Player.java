@@ -1,7 +1,7 @@
 package com.insa.othello.model;
 
 import com.insa.othello.ai.AI;
-import com.insa.othello.ai.AIFactory;
+import com.insa.othello.ai.AbstractAI;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
@@ -21,7 +21,7 @@ public class Player {
     public Player(Cell color, PlayerType type, StrategyType strategy, int maxDepth, int score) {
         this.color = color;
         this.type = type;
-        this.ai = AIFactory.createAI(type, strategy, maxDepth, color);
+        this.ai = AbstractAI.createAI(type, strategy, maxDepth, color);
         this.score = score;
     }
 
