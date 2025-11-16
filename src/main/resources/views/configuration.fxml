@@ -16,7 +16,7 @@
 <?import javafx.scene.shape.Circle?>
 <?import javafx.scene.text.Font?>
 
-<VBox alignment="CENTER" minHeight="700.0" minWidth="1200.0" spacing="40.0" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.othello.controller.ConfigurationController">
+<VBox alignment="CENTER" focusTraversable="true" minHeight="700.0" minWidth="1200.0" spacing="40.0" stylesheets="@../styles/configuration.css" xmlns="http://javafx.com/javafx/25" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.insa.othello.controller.ConfigurationController">
     <padding>
         <Insets bottom="20.0" left="20.0" right="20.0" top="20.0" />
     </padding>
@@ -35,7 +35,7 @@
                   <HBox alignment="CENTER" spacing="50.0">
                       <Circle radius="80.0" stroke="#9a9a9a" strokeType="INSIDE" strokeWidth="3.0" />
                       <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -46,7 +46,7 @@
                                   <ToggleGroup fx:id="tgBlackPlayer" />
                               </toggleGroup>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgBlackPlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgBlackPlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -54,7 +54,7 @@
                                   <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                               </padding>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgBlackPlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgBlackPlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -62,7 +62,7 @@
                                   <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                               </padding>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgBlackPlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgBlackPlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -98,7 +98,7 @@
                           <RowConstraints vgrow="SOMETIMES" />
                           <RowConstraints vgrow="SOMETIMES" />
                       </rowConstraints>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -109,7 +109,7 @@
                         <ToggleGroup fx:id="tgBlackStrategy" />
                      </toggleGroup>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -117,7 +117,7 @@
                               <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                           </padding>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgBlackStrategy" GridPane.rowIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgBlackStrategy" GridPane.rowIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -125,7 +125,7 @@
                               <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                           </padding>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgBlackStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -153,14 +153,14 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                       <HBox spacing="10.0" HBox.hgrow="ALWAYS">
-                          <Spinner fx:id="spBlackLimitMS" editable="true" />
+                          <Spinner fx:id="spBlackLimitMS" editable="true" focusTraversable="false" />
                           <Label text="ms">
                               <font>
                                   <Font size="18.0" />
                               </font>
                           </Label>
                           <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
-                          <Spinner fx:id="spBlackLimitStep" editable="true" />
+                          <Spinner fx:id="spBlackLimitStep" editable="true" focusTraversable="false" />
                           <Label text="steps">
                               <font>
                                   <Font size="18.0" />
@@ -189,7 +189,7 @@
                   <HBox alignment="CENTER" spacing="50.0">
                       <Circle fill="WHITE" radius="80.0" stroke="#9a9a9a" strokeType="INSIDE" strokeWidth="3.0" />
                       <VBox alignment="CENTER" spacing="10.0" HBox.hgrow="ALWAYS">
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Human player">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -200,7 +200,7 @@
                            <ToggleGroup fx:id="tgWhitePlayer" />
                         </toggleGroup>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgWhitePlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax" toggleGroup="$tgWhitePlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -208,7 +208,7 @@
                                   <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                               </padding>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgWhitePlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="MinMax (α–β)" toggleGroup="$tgWhitePlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -216,7 +216,7 @@
                                   <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                               </padding>
                           </ToggleButton>
-                          <ToggleButton maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgWhitePlayer">
+                          <ToggleButton focusTraversable="false" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="NegaMax" toggleGroup="$tgWhitePlayer">
                               <font>
                                   <Font size="18.0" />
                               </font>
@@ -252,7 +252,7 @@
                           <RowConstraints vgrow="SOMETIMES" />
                           <RowConstraints vgrow="SOMETIMES" />
                       </rowConstraints>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" selected="true" text="Positional">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -263,7 +263,7 @@
                         <ToggleGroup fx:id="tgWhiteStrategy" />
                      </toggleGroup>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Absolute" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -271,7 +271,7 @@
                               <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                           </padding>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgWhiteStrategy" GridPane.rowIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mobile" toggleGroup="$tgWhiteStrategy" GridPane.rowIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -279,7 +279,7 @@
                               <Insets bottom="5.0" left="50.0" right="50.0" top="5.0" />
                           </padding>
                       </ToggleButton>
-                      <ToggleButton maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
+                      <ToggleButton focusTraversable="false" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false" text="Mixte" toggleGroup="$tgWhiteStrategy" GridPane.columnIndex="1" GridPane.rowIndex="1">
                           <font>
                               <Font size="18.0" />
                           </font>
@@ -307,14 +307,14 @@
                   </Label>
                   <HBox prefHeight="100.0" prefWidth="200.0">
                       <HBox spacing="10.0" HBox.hgrow="ALWAYS">
-                          <Spinner fx:id="spWhiteLimitMS" editable="true" />
+                          <Spinner fx:id="spWhiteLimitMS" editable="true" focusTraversable="false" />
                           <Label text="ms">
                               <font>
                                   <Font size="18.0" />
                               </font>
                           </Label>
                           <Region maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" HBox.hgrow="ALWAYS" />
-                          <Spinner fx:id="spWhiteLimitStep" editable="true" />
+                          <Spinner fx:id="spWhiteLimitStep" editable="true" focusTraversable="false" />
                           <Label text="steps">
                               <font>
                                   <Font size="18.0" />
@@ -329,7 +329,7 @@
          </padding>
         </VBox>
     </HBox>
-    <Button mnemonicParsing="false" onAction="#handleStart" text="Start">
+    <Button focusTraversable="false" mnemonicParsing="false" onAction="#handleStart" text="Start">
         <font>
             <Font name="System Bold" size="36.0" />
         </font>

@@ -1,251 +1,98 @@
 package com.insa.othello.model;
 
-import com.insa.othello.constant.Cell;
-
-import java.util.ArrayList;
-import java.util.List;
+import com.insa.othello.constant.Message;
 
 import static com.insa.othello.constant.Cell.BLACK;
 import static com.insa.othello.constant.Cell.WHITE;
-import static com.insa.othello.constant.Configuration.SIZE;
+import static com.insa.othello.constant.Message.BLACK_TURN;
+import static com.insa.othello.constant.Message.WHITE_TURN;
 
 public class Game {
-    private static final int[][] DIRECTIONS = {
-            {-1, -1}, {-1, 0}, {-1, 1},
-            {0, -1}, {0, 1},
-            {1, -1}, {1, 0}, {1, 1}
-    };
-
     private final Board board;
-    private final List<GameObserver> observers;
-    private final List<Move> gameHistory;
     private Player activePlayer;
     private Player passivePlayer;
-    private Cell currentPlayerColor;
-    private boolean isGameOver;
+
+    private Message message;
+    private boolean isOver;
 
     public Game(GameConfiguration configuration) {
         this.board = new Board();
 
-        this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy());
-        this.passivePlayer = new Player(WHITE, configuration.whitePlayer(), configuration.whiteStrategy());
+        this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy(), 2);
+        this.passivePlayer = new Player(WHITE, configuration.whitePlayer(), configuration.whiteStrategy(), 2);
 
-        this.observers = new ArrayList<>();
-        this.gameHistory = new ArrayList<>();
-    }
-
-    public Game(Player activePlayer, Player passivePlayer) {
-        this.board = new Board();
-
-        this.activePlayer = activePlayer;
-        this.passivePlayer = passivePlayer;
-
-        this.currentPlayerColor = BLACK;
-        this.isGameOver = false;
-        this.gameHistory = new ArrayList<>();
-        this.observers = new ArrayList<>();
+        this.init();
     }
 
     public void init() {
-        this.board.init();
-        if (this.activePlayer.getColor() == WHITE)
-            this.changePlayer();
-        this.isGameOver = false;
-        this.gameHistory.clear();
-        this.notifyObservers();
+        if (this.activePlayer.getColor() == WHITE) {
+            this.switchPlayer();
+        }
+        this.activePlayer.setScore(2);
+        this.passivePlayer.setScore(2);
+
+        this.board.init(this.activePlayer.getColor());
+        this.board.updatePossiblePlay(this.activePlayer.getColor());
+        this.message = BLACK_TURN;
     }
 
-    private void changePlayer() {
+    public Board getBoard() {
+        return this.board;
+    }
+
+    public Player getActivePlayer() {
+        return this.activePlayer;
+    }
+
+    public Player getPassivePlayer() {
+        return this.passivePlayer;
+    }
+
+    public Player getBlackPlayer() {
+        return this.activePlayer.getColor() == BLACK ? this.activePlayer : this.passivePlayer;
+    }
+
+    public Player getWhitePlayer() {
+        return this.activePlayer.getColor() == WHITE ? this.activePlayer : this.passivePlayer;
+    }
+
+    public Message getMessage() {
+        return this.message;
+    }
+
+    public boolean isOver() {
+        return this.isOver;
+    }
+
+    public void play(int r, int c) {
+        int scored = this.board.play(r, c, this.activePlayer.getColor());
+        this.activePlayer.setScore(this.activePlayer.getScore() + scored + 1);
+        this.passivePlayer.setScore(this.passivePlayer.getScore() - scored);
+        this.switchPlayer();
+        this.board.updatePossiblePlay(this.activePlayer.getColor());
+
+        if (!this.board.isPlayable()) {
+            this.switchPlayer();
+            this.board.updatePossiblePlay(this.activePlayer.getColor());
+        }
+
+        if (!this.board.isPlayable())
+            this.isOver = true;
+        else
+            return;
+
+        if (this.getBlackPlayer().getScore() > this.getWhitePlayer().getScore())
+            this.message = Message.BLACK_WIN;
+        else if (this.getWhitePlayer().getScore() > this.getBlackPlayer().getScore())
+            this.message = Message.WHITE_WIN;
+        else
+            this.message = Message.DRAW;
+    }
+
+    private void switchPlayer() {
         Player tmp = this.activePlayer;
         this.activePlayer = this.passivePlayer;
         this.passivePlayer = tmp;
-    }
-
-    public void addObserver(GameObserver observer) {
-        observers.add(observer);
-    }
-
-    private void notifyObservers() {
-        for (GameObserver observer : observers) {
-            observer.onGameStateChanged();
-        }
-    }
-
-    public List<Move> getValidMoves() {
-        List<Move> validMoves = new ArrayList<>();
-
-        for (int row = 0; row < SIZE; row++) {
-            for (int col = 0; col < SIZE; col++) {
-                if (board.isEmpty(row, col)) {
-                    List<int[]> flipped = getFlippedPieces(row, col, currentPlayerColor);
-                    if (!flipped.isEmpty()) {
-                        validMoves.add(new Move(row, col, flipped));
-                    }
-                }
-            }
-        }
-
-        return validMoves;
-    }
-
-    /**
-     * Retourne les disques qui seraient retournés si on joue un coup à (row, col)
-     */
-    private List<int[]> getFlippedPieces(int row, int col, Cell player) {
-        List<int[]> flipped = new ArrayList<>();
-        Cell opponent = player.opponent();
-
-        // Pour chaque direction
-        for (int[] direction : DIRECTIONS) {
-            List<int[]> temp = new ArrayList<>();
-            int r = row + direction[0];
-            int c = col + direction[1];
-
-            // Parcourir la direction jusqu'à trouver un disque allié ou vide
-            while (board.getCell(r, c) == opponent) {
-                temp.add(new int[]{r, c});
-                r += direction[0];
-                c += direction[1];
-            }
-
-            // Si on a trouvé un disque allié à la fin, on retourne tous les disques adverses
-            if (board.getCell(r, c) == player) {
-                flipped.addAll(temp);
-            }
-        }
-
-        return flipped;
-    }
-
-    /**
-     * Joue un coup pour le joueur courant
-     */
-    public void playMove(Move move) {
-        if (!isValidMove(move)) {
-            throw new IllegalArgumentException("Invalid move: " + move);
-        }
-
-        // Placer le disque du joueur
-        board.play(move.getRow(), move.getCol(), currentPlayerColor);
-
-        // Retourner les disques adverses
-        if (move.getFlippedPieces() != null) {
-            for (int[] pos : move.getFlippedPieces()) {
-                board.play(pos[0], pos[1], currentPlayerColor);
-            }
-        }
-
-        // Ajouter le coup à l'historique
-        gameHistory.add(move);
-
-        // Changer de joueur
-        switchPlayer();
-
-        // Vérifier la fin du jeu
-        checkGameOver();
-
-        // Notifier les observateurs
-        notifyObservers();
-    }
-
-    /**
-     * Vérifie si un coup est valide
-     */
-    public boolean isValidMove(Move move) {
-        List<Move> validMoves = getValidMoves();
-        return validMoves.contains(move);
-    }
-
-    /**
-     * Change le joueur courant
-     */
-    private void switchPlayer() {
-        currentPlayerColor = currentPlayerColor.opponent();
-    }
-
-    /**
-     * Vérifie si le jeu est terminé
-     */
-    private void checkGameOver() {
-        // Le jeu est terminé si les deux joueurs n'ont pas de coups valides
-        List<Move> movesCurrentPlayer = getValidMoves();
-
-        if (!movesCurrentPlayer.isEmpty()) {
-            isGameOver = false;
-            return;
-        }
-
-        // Passer au joueur suivant
-        switchPlayer();
-        List<Move> movesNextPlayer = getValidMoves();
-
-        if (movesNextPlayer.isEmpty()) {
-            // Les deux joueurs sont bloqués
-            isGameOver = true;
-        } else {
-            // Le joueur courant peut jouer à nouveau
-            isGameOver = false;
-        }
-    }
-
-    /**
-     * Retourne le joueur qui peut jouer actuellement
-     * Retourne null si personne ne peut jouer (jeu terminé)
-     */
-    public Player getCurrentPlayer() {
-        if (currentPlayerColor == BLACK) {
-            return activePlayer;
-        } else if (currentPlayerColor == Cell.WHITE) {
-            return passivePlayer;
-        }
-        return null;
-    }
-
-    /**
-     * Retourne la couleur du joueur courant
-     */
-    public Cell getCurrentPlayerColor() {
-        return currentPlayerColor;
-    }
-
-    /**
-     * Vérifie si le jeu est terminé
-     */
-    public boolean isGameOver() {
-        return isGameOver;
-    }
-
-    /**
-     * Retourne le plateau
-     */
-    public Board getBoard() {
-        return board;
-    }
-
-    /**
-     * Retourne l'historique des coups
-     */
-    public List<Move> getGameHistory() {
-        return new ArrayList<>(gameHistory);
-    }
-
-    /**
-     * Retourne les scores finaux
-     */
-    public GameResult getGameResult() {
-        int blackScore = board.countPieces(BLACK);
-        int whiteScore = board.countPieces(Cell.WHITE);
-
-        String winner;
-//        if (blackScore > whiteScore) {
-//            winner = activePlayer.getName();
-//        } else if (whiteScore > blackScore) {
-//            winner = passivePlayer.getName();
-//        } else {
-//            winner = "Draw";
-//        }
-
-//        return new GameResult(activePlayer.getName(), passivePlayer.getName(), blackScore, whiteScore, winner);
-        return null;
+        this.message = this.activePlayer.getColor() == BLACK ? BLACK_TURN : WHITE_TURN;
     }
 }

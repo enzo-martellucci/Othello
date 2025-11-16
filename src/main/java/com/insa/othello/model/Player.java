@@ -5,17 +5,17 @@ import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
 
-import static com.insa.othello.constant.PlayerType.HUMAN;
-
 public class Player {
     private final Cell color;
     private final PlayerType type;
     private final AI ai;
+    private int score;
 
-    public Player(Cell color, PlayerType type, StrategyType strategy) {
+    public Player(Cell color, PlayerType type, StrategyType strategy, int score) {
         this.color = color;
         this.type = type;
         this.ai = null;
+        this.score = score;
     }
 
     public Cell getColor() {
@@ -26,11 +26,15 @@ public class Player {
         return type;
     }
 
-    public boolean isHuman() {
-        return this.type == HUMAN;
+    public AI getAi() {
+        return ai;
     }
 
-    public boolean isAI() {
-        return !this.isHuman();
+    public int getScore() {
+        return score;
+    }
+
+    public void setScore(int score) {
+        this.score = score;
     }
 }

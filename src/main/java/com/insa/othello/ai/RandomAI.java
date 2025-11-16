@@ -1,8 +1,9 @@
 package com.insa.othello.ai;
 
+import com.insa.othello.constant.Cell;
 import com.insa.othello.model.Board;
 import com.insa.othello.model.Move;
-import com.insa.othello.constant.Cell;
+
 import java.util.List;
 import java.util.Random;
 
@@ -28,13 +29,5 @@ public class RandomAI implements AI {
 
         // Choisir un coup aléatoire
         return availableMoves.get(random.nextInt(availableMoves.size()));
-    }
-
-    /**
-     * Retourne le nom de la stratégie
-     */
-    @Override
-    public String getStrategyName() {
-        return "Random AI";
     }
 }

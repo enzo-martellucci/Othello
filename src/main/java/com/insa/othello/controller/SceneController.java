@@ -29,14 +29,15 @@ public class SceneController {
         this.stage.setTitle("Othello");
         this.stage.setScene(this.scene);
 
-        this.configure();
+        this.configure(null);
 
         this.stage.sizeToScene();
         this.stage.show();
     }
 
-    public void configure() {
-        this.switchTo("configuration");
+    public void configure(GameConfiguration gameConfiguration) {
+        ConfigurationController configurationController = this.switchToAndGetController("configuration", ConfigurationController.class);
+        configurationController.configure(gameConfiguration);
     }
 
     public void play(GameConfiguration gameConfiguration) {

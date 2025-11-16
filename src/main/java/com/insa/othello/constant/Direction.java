@@ -10,19 +10,19 @@ public enum Direction {
     DOWN(1, 0),
     DOWN_RIGHT(1, 1);
 
-    private final int offsetRow;
-    private final int offsetCol;
+    private final int offsetR;
+    private final int offsetC;
 
-    Direction(int offsetRow, int offsetCol) {
-        this.offsetRow = offsetRow;
-        this.offsetCol = offsetCol;
+    Direction(int offsetR, int offsetC) {
+        this.offsetR = offsetR;
+        this.offsetC = offsetC;
     }
 
-    public int getOffsetRow() {
-        return offsetRow;
+    public int getOffsetR() {
+        return offsetR;
     }
 
-    public int getOffsetCol() {
-        return offsetCol;
+    public int getOffsetC() {
+        return offsetC;
     }
 }

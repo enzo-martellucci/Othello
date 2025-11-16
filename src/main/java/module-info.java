@@ -5,7 +5,10 @@ module com.insa.othello {
     requires org.controlsfx.controls;
     requires java.desktop;
 
-    opens com.insa.othello to javafx.fxml;
-    opens com.insa.othello.controller to javafx.fxml;
+    opens com.insa.othello;
+    opens com.insa.othello.ai;
+    opens com.insa.othello.constant;
+    opens com.insa.othello.controller;
+    opens com.insa.othello.model;
     exports com.insa.othello;
 }
