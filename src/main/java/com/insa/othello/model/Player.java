@@ -6,11 +6,7 @@ import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
-
-import static com.insa.othello.constant.PlayerType.HUMAN;
 
 public class Player {
     private final Cell color;
@@ -18,10 +14,10 @@ public class Player {
     private final AI ai;
     private int score;
 
-    public Player(Cell color, PlayerType type, StrategyType strategy, int maxDepth, int score) {
+    public Player(Cell color, PlayerType type, StrategyType strategy, int limitMS, int maxDepth, int score) {
         this.color = color;
         this.type = type;
-        this.ai = AbstractAI.createAI(type, strategy, maxDepth, color);
+        this.ai = AbstractAI.createAI(type, strategy, limitMS, maxDepth, color);
         this.score = score;
     }
 
@@ -45,7 +41,7 @@ public class Player {
         this.score = score;
     }
 
-    public void playAI(Board board, Map<Position, List<Position>> mapMove, Consumer<Position> callback) {
-        this.ai.search(board, mapMove, callback);
+    public void playAI(Board board, Consumer<Position> callback) {
+        this.ai.search(board, callback);
     }
 }

@@ -22,12 +22,12 @@ public class Game {
 
     private boolean isAIPlaying;
 
-    public Game(GameConfiguration configuration, GameController controller) {
+    public Game(GameConfiguration config, GameController controller) {
         this.controller = controller;
         this.board = new Board();
 
-        this.activePlayer = new Player(BLACK, configuration.blackPlayer(), configuration.blackStrategy(), configuration.blackLimitStep(), 2);
-        this.passivePlayer = new Player(WHITE, configuration.whitePlayer(), configuration.whiteStrategy(), configuration.whiteLimitStep(), 2);
+        this.activePlayer = new Player(BLACK, config.blackPlayer(), config.blackStrategy(), config.blackLimitMS(), config.blackLimitStep(), 2);
+        this.passivePlayer = new Player(WHITE, config.whitePlayer(), config.whiteStrategy(), config.whiteLimitMS(), config.whiteLimitStep(), 2);
 
         this.init();
     }
@@ -45,7 +45,7 @@ public class Game {
 
         this.isAIPlaying = this.activePlayer.isAI();
         if (this.isAIPlaying)
-            this.activePlayer.playAI(this.board, this.board.getMapMove(), this::playAI);
+            this.activePlayer.playAI(this.board, this::playAI);
     }
 
     public Board getBoard() {
@@ -77,14 +77,19 @@ public class Game {
     }
 
     public void play(Position p) {
+        if (this.isAIPlaying)
+            return;
+
         int scored = this.board.play(p.r(), p.c(), this.activePlayer.getColor());
         this.activePlayer.setScore(this.activePlayer.getScore() + scored + 1);
         this.passivePlayer.setScore(this.passivePlayer.getScore() - scored);
 
         this.nextTurn();
 
-        if (!this.isOver && this.activePlayer.isAI())
-            this.activePlayer.playAI(this.board, this.board.getMapMove(), this::playAI);
+        if (!this.isOver && this.activePlayer.isAI()) {
+            this.isAIPlaying = true;
+            this.activePlayer.playAI(this.board, this::playAI);
+        }
     }
 
     public void playAI(Position p) {

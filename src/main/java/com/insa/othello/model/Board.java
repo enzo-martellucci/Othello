@@ -14,10 +14,12 @@ import static com.insa.othello.constant.Configuration.SIZE;
 public class Board {
     private final Cell[][] grid;
     private final Map<Position, List<Position>> mapMove;
+    private int nbMove;
 
     public Board() {
         this.grid = new Cell[SIZE][SIZE];
         this.mapMove = new HashMap<>();
+        this.nbMove = 0;
     }
 
     public void init() {
@@ -31,6 +33,7 @@ public class Board {
         grid[4][4] = Cell.WHITE;
 
         this.mapMove.clear();
+        this.nbMove = 0;
     }
 
     public Cell[][] getGrid() {
@@ -39,6 +42,21 @@ public class Board {
 
     public Map<Position, List<Position>> getMapMove() {
         return this.mapMove;
+    }
+
+    public int getNbMove() {
+        return this.nbMove;
+    }
+
+    public Board copy() {
+        Board boardCopy = new Board();
+        for (int i = 0; i < SIZE; i++)
+            System.arraycopy(this.grid[i], 0, boardCopy.grid[i], 0, SIZE);
+        for (Map.Entry<Position, List<Position>> entry : this.mapMove.entrySet())
+            boardCopy.mapMove.put(entry.getKey(), List.copyOf(entry.getValue()));
+        boardCopy.nbMove = this.nbMove;
+
+        return boardCopy;
     }
 
     public boolean isPlayable() {
@@ -52,6 +70,8 @@ public class Board {
         int scored = this.mapMove.get(position).size();
         this.mapMove.get(position).forEach(p -> this.grid[p.r()][p.c()] = color);
         this.mapMove.remove(position);
+
+        this.nbMove++;
 
         return scored;
     }

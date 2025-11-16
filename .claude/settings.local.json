@@ -7,7 +7,9 @@
       "Bash(./mvnw test:*)",
       "Bash(git add:*)",
       "Bash(git commit -m \"$(cat <<''EOF''\nImplémenter les IA avancées (MinMax, AlphaBeta) avec stratégies d''évaluation\n\nNouvelles fonctionnalités :\n- Créer AbstractAI pour centraliser la gestion du threading JavaFX\n- Ajouter interface EvaluationStrategy pour les fonctions d''évaluation du plateau\n- Implémenter 4 stratégies d''évaluation :\n  - PositionalStrategy : évalue basée sur la position (coins/bords)\n  - AbsoluteStrategy : simple compte de pions\n  - MobileStrategy : minimise la flexibilité adverse\n  - MixteStrategy : combinaison pondérée des 3 autres\n- Implémenter MinMaxAI avec recherche récursive jusqu''à une profondeur donnée\n- Implémenter AlphaBetaAI avec pruning pour optimiser la recherche\n- Créer AIFactory et StrategyFactory pour l''instanciation correcte\n- Refactoriser RandomAI pour hériter d''AbstractAI\n- Adapter Player pour créer les bonnes IA selon le type et la stratégie\n- Ajouter tests unitaires pour valider les IA et stratégies\n\n🤖 Generated with Claude Code\n\nCo-Authored-By: Claude <noreply@anthropic.com>\nEOF\n)\")",
-      "Bash(git commit:*)"
+      "Bash(git commit:*)",
+      "Bash(tree:*)",
+      "Bash(nul)"
     ],
     "deny": [],
     "ask": []

@@ -20,4 +20,3 @@ public class AbsoluteStrategy implements EvaluationStrategy {
         return score;
     }
 }
- 

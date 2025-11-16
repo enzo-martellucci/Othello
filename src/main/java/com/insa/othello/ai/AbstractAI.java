@@ -11,88 +11,60 @@ import com.insa.othello.model.Position;
 import javafx.concurrent.Service;
 import javafx.concurrent.Task;
 
-import java.util.List;
-import java.util.Map;
 import java.util.function.Consumer;
 
-/**
- * Classe abstraite pour les implémentations d'IA.
- * Gère le threading et l'async via JavaFX Service.
- * Les sous-classes doivent implémenter selectMove() pour la logique spécifique.
- */
+import static com.insa.othello.constant.PlayerType.HUMAN;
+
 public abstract class AbstractAI extends Service<Position> implements AI {
+    public static final Cell MAXIMIZER = Cell.BLACK;
+    public static final Cell MINIMIZER = Cell.WHITE;
+
     protected Board board;
-    protected Map<Position, List<Position>> mapMove;
 
     public AbstractAI() {
-        this.setOnFailed(event -> {
-            Throwable exception = getException();
-            System.err.println("Erreur dans l'IA: " + exception.getMessage());
+        this.setOnFailed(_ -> {
+            Throwable exception = AbstractAI.this.getException();
+            System.err.println("AI error : " + exception.getMessage());
             exception.printStackTrace();
         });
     }
 
+    public static AI createAI(PlayerType playerType, StrategyType strategyType, int limitMS, int maxDepth, Cell playerColor) {
+        EvaluationStrategy strategy = playerType == HUMAN ? null : EvaluationStrategy.create(strategyType);
+        return switch (playerType) {
+            case MIN_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor);
+            case MIN_MAX_ALPHA_BETA -> new AlphaBetaAI(strategy, limitMS, maxDepth, playerColor);
+            case NEGA_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor); // TODO: Implémenter NegaMax
+            case HUMAN -> null;
+        };
+    }
+
     @Override
-    public void search(Board board, Map<Position, List<Position>> mapMove, Consumer<Position> callback) {
+    public void search(Board board, Consumer<Position> callback) {
         this.board = board;
-        this.mapMove = mapMove;
         this.setOnSucceeded(_ -> callback.accept(this.getValue()));
 
-        if (this.getState() == State.READY) {
+        if (this.getState() == State.READY)
             this.start();
-        } else {
+        else
             this.restart();
-        }
     }
 
     @Override
     protected Task<Position> createTask() {
         final Board currentBoard = this.board;
-        final Map<Position, List<Position>> currentMapMove = this.mapMove;
 
         return new Task<>() {
             @Override
-            protected Position call() throws Exception {
+            protected Position call() {
                 if (isCancelled()) {
                     return null;
                 }
 
-                return selectMove(currentBoard, currentMapMove);
+                return AbstractAI.this.selectMove(currentBoard);
             }
         };
     }
 
-    /**
-     * Sélectionne le meilleur coup pour la position actuelle.
-     * À implémenter par les sous-classes.
-     *
-     * @param board Le plateau actuel
-     * @param mapMove Map des coups valides (position -> pions à retourner)
-     * @return La position du coup sélectionné
-     */
-    protected abstract Position selectMove(Board board, Map<Position, List<Position>> mapMove);
-
-    /**
-     * Crée une instance d'IA appropriée selon le type et la stratégie sélectionnés.
-     *
-     * @param playerType Type de joueur (HUMAN, MIN_MAX, MIN_MAX_ALPHA_BETA, NEGA_MAX)
-     * @param strategyType Type de stratégie d'évaluation
-     * @param maxDepth Profondeur maximale de recherche
-     * @param playerColor Couleur du joueur
-     * @return Instance d'IA, ou null si c'est un joueur humain
-     */
-    public static AI createAI(PlayerType playerType, StrategyType strategyType, int maxDepth, Cell playerColor) {
-        if (playerType == PlayerType.HUMAN) {
-            return null;
-        }
-
-        EvaluationStrategy strategy = EvaluationStrategy.create(strategyType);
-
-        return switch (playerType) {
-            case MIN_MAX -> new MinMaxAI(strategy, maxDepth, playerColor);
-            case MIN_MAX_ALPHA_BETA -> new AlphaBetaAI(strategy, maxDepth, playerColor);
-            case NEGA_MAX -> new MinMaxAI(strategy, maxDepth, playerColor); // TODO: Implémenter NegaMax
-            case HUMAN -> null;
-        };
-    }
+    protected abstract Position selectMove(Board board);
 }
