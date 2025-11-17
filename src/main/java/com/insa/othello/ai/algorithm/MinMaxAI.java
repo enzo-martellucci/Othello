@@ -5,16 +5,14 @@ import com.insa.othello.constant.Cell;
 import com.insa.othello.model.Board;
 import com.insa.othello.model.Position;
 
-public class MinMaxAI extends AbstractAI
-{
+public class MinMaxAI extends AbstractAI {
     private final EvaluationStrategy strategy;
     private final int limitMS;
     private final int maxDepth;
     private final Cell playerColor;
     private long startTime;
 
-    public MinMaxAI(EvaluationStrategy strategy, int limitMS, int maxDepth, Cell playerColor)
-    {
+    public MinMaxAI(EvaluationStrategy strategy, int limitMS, int maxDepth, Cell playerColor) {
         this.strategy = strategy;
         this.limitMS = limitMS;
         this.maxDepth = maxDepth;
@@ -22,44 +20,27 @@ public class MinMaxAI extends AbstractAI
     }
 
     @Override
-    protected Position selectMove(Board board, Cell color)
-    {
-        // Initialiser le chronomètre
+    protected Position selectMove(Board board, Cell color) {
         this.startTime = System.currentTimeMillis();
 
-        // Récupérer les coups valides
         var validMoves = board.getMapMove().keySet();
-
-        // Si aucun coup valide, retourner null (passe)
-        if (validMoves.isEmpty()) {
+        if (validMoves.isEmpty())
             return null;
-        }
 
-        // Déterminer si on maximise ou minimise
         boolean isMaximizing = (color == MAXIMIZER);
-
         Position bestMove = null;
         int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
-        // Évaluer chaque coup possible
         for (Position move : validMoves) {
-            // Vérifier la limite de temps
-            if (isTimeUp()) {
+            if (isTimeUp())
                 break;
-            }
 
-            // Créer une copie du plateau et jouer le coup
             Board newBoard = board.copy();
             newBoard.play(move.r(), move.c(), color);
-
-            // Préparer le tour suivant
             Cell nextColor = color.opponent();
             newBoard.updatePossiblePlay(nextColor);
 
-            // Appeler MinMax récursivement
             int score = minmax(newBoard, nextColor, 1, !isMaximizing);
-
-            // Mettre à jour le meilleur coup
             if (isMaximizing) {
                 if (score > bestScore) {
                     bestScore = score;
@@ -76,83 +57,45 @@ public class MinMaxAI extends AbstractAI
         return bestMove;
     }
 
-    /**
-     * Algorithme MinMax récursif
-     * @param board Le plateau actuel
-     * @param color La couleur du joueur actuel
-     * @param depth La profondeur actuelle
-     * @param isMaximizing True si on maximise, false si on minimise
-     * @return Le score du meilleur coup
-     */
-    private int minmax(Board board, Cell color, int depth, boolean isMaximizing)
-    {
-        // Vérifier la limite de temps
-        if (isTimeUp()) {
-            return strategy.evaluate(board);
-        }
+    private int minmax(Board board, Cell color, int depth, boolean isMaximizing) {
+        if (isTimeUp())
+            return this.strategy.evaluate(board);
 
-        // Vérifier la profondeur maximale
-        if (depth >= maxDepth) {
-            return strategy.evaluate(board);
-        }
+        if (depth >= this.maxDepth)
+            return this.strategy.evaluate(board);
 
-        // Récupérer les coups valides
         var validMoves = board.getMapMove().keySet();
-
-        // Cas terminal : aucun coup valide
         if (validMoves.isEmpty()) {
-            // Vérifier si l'adversaire peut jouer
             Cell nextColor = color.opponent();
             Board nextBoard = board.copy();
             nextBoard.updatePossiblePlay(nextColor);
 
-            // Si l'adversaire ne peut pas jouer non plus, la partie est finie
-            if (nextBoard.getMapMove().isEmpty()) {
-                return strategy.evaluate(board);
-            }
-
-            // Sinon, passer le tour à l'adversaire
+            if (nextBoard.getMapMove().isEmpty())
+                return this.strategy.evaluate(board);
             return minmax(nextBoard, nextColor, depth, !isMaximizing);
         }
 
-        // Initialiser le meilleur score
         int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
-
-        // Évaluer chaque coup possible
         for (Position move : validMoves) {
-            // Vérifier la limite de temps
-            if (isTimeUp()) {
+            if (isTimeUp())
                 break;
-            }
 
-            // Créer une copie du plateau et jouer le coup
             Board newBoard = board.copy();
             newBoard.play(move.r(), move.c(), color);
-
-            // Préparer le tour suivant
             Cell nextColor = color.opponent();
             newBoard.updatePossiblePlay(nextColor);
 
-            // Appel récursif
             int score = minmax(newBoard, nextColor, depth + 1, !isMaximizing);
-
-            // Mettre à jour le meilleur score
-            if (isMaximizing) {
+            if (isMaximizing)
                 bestScore = Math.max(bestScore, score);
-            } else {
+            else
                 bestScore = Math.min(bestScore, score);
-            }
         }
 
         return bestScore;
     }
 
-    /**
-     * Vérifie si la limite de temps est dépassée
-     * @return True si le temps est écoulé
-     */
-    private boolean isTimeUp()
-    {
-        return (System.currentTimeMillis() - startTime) >= limitMS;
+    private boolean isTimeUp() {
+        return (System.currentTimeMillis() - this.startTime) >= this.limitMS;
     }
 }
