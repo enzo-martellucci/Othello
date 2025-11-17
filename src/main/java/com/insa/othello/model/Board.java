@@ -11,18 +11,21 @@ import java.util.Map;
 import static com.insa.othello.constant.Cell.EMPTY;
 import static com.insa.othello.constant.Configuration.SIZE;
 
-public class Board {
+public class Board
+{
     private final Cell[][] grid;
     private final Map<Position, List<Position>> mapMove;
     private int nbMove;
 
-    public Board() {
+    public Board()
+    {
         this.grid = new Cell[SIZE][SIZE];
         this.mapMove = new HashMap<>();
         this.nbMove = 0;
     }
 
-    public void init() {
+    public void init()
+    {
         for (int i = 0; i < SIZE; i++)
             for (int j = 0; j < SIZE; j++)
                 grid[i][j] = EMPTY;
@@ -36,19 +39,34 @@ public class Board {
         this.nbMove = 0;
     }
 
-    public Cell[][] getGrid() {
+    public Board clone(Board board)
+    {
+        Board clone = new Board();
+        for (int i = 0; i < SIZE; i++)
+            System.arraycopy(board.grid[i], 0, clone.grid[i], 0, SIZE);
+        for (Map.Entry<Position, List<Position>> entry : board.mapMove.entrySet())
+            clone.mapMove.put(entry.getKey(), List.copyOf(entry.getValue()));
+        clone.nbMove = board.nbMove;
+        return clone;
+    }
+
+    public Cell[][] getGrid()
+    {
         return this.grid;
     }
 
-    public Map<Position, List<Position>> getMapMove() {
+    public Map<Position, List<Position>> getMapMove()
+    {
         return this.mapMove;
     }
 
-    public int getNbMove() {
+    public int getNbMove()
+    {
         return this.nbMove;
     }
 
-    public Board copy() {
+    public Board copy()
+    {
         Board boardCopy = new Board();
         for (int i = 0; i < SIZE; i++)
             System.arraycopy(this.grid[i], 0, boardCopy.grid[i], 0, SIZE);
@@ -59,11 +77,13 @@ public class Board {
         return boardCopy;
     }
 
-    public boolean isPlayable() {
+    public boolean isPlayable()
+    {
         return !this.mapMove.isEmpty();
     }
 
-    public int play(int row, int col, Cell color) {
+    public int play(int row, int col, Cell color)
+    {
         this.grid[row][col] = color;
 
         Position position = new Position(row, col);
@@ -76,7 +96,8 @@ public class Board {
         return scored;
     }
 
-    public void updatePossiblePlay(Cell color) {
+    public void updatePossiblePlay(Cell color)
+    {
         for (Position p : this.mapMove.keySet())
             this.grid[p.r()][p.c()] = EMPTY;
         this.mapMove.clear();
@@ -96,7 +117,8 @@ public class Board {
         }
     }
 
-    private List<Position> getFlippedPieces(Position position, Cell color) {
+    private List<Position> getFlippedPieces(Position position, Cell color)
+    {
         List<Position> lstFlipped = new ArrayList<>();
         Cell opponent = color.opponent();
 

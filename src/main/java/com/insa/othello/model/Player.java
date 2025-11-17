@@ -1,7 +1,7 @@
 package com.insa.othello.model;
 
 import com.insa.othello.ai.AI;
-import com.insa.othello.ai.AbstractAI;
+import com.insa.othello.ai.algorithm.AbstractAI;
 import com.insa.othello.constant.Cell;
 import com.insa.othello.constant.PlayerType;
 import com.insa.othello.constant.StrategyType;
@@ -42,6 +42,6 @@ public class Player {
     }
 
     public void playAI(Board board, Consumer<Position> callback) {
-        this.ai.search(board, callback);
+        this.ai.search(board, this.color, callback);
     }
 }

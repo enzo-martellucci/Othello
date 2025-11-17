@@ -11,4 +11,5 @@ module com.insa.othello {
     opens com.insa.othello.controller;
     opens com.insa.othello.model;
     exports com.insa.othello;
+    opens com.insa.othello.ai.algorithm;
 }
