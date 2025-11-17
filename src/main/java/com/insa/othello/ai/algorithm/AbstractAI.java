@@ -34,7 +34,7 @@ public abstract class AbstractAI extends Service<Position> implements AI
         EvaluationStrategy strategy = playerType == HUMAN ? null : EvaluationStrategy.create(strategyType);
         return switch (playerType) {
             case MIN_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor);
-            case MIN_MAX_ALPHA_BETA -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor); // TODO: Implémenter AlphaBeta
+            case MIN_MAX_ALPHA_BETA -> new AlphaBetaAI(strategy, limitMS, maxDepth, playerColor);
             case NEGA_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor); // TODO: Implémenter NegaMax
             case HUMAN -> null;
         };

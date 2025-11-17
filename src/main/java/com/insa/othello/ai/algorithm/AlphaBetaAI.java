@@ -5,7 +5,7 @@ import com.insa.othello.constant.Cell;
 import com.insa.othello.model.Board;
 import com.insa.othello.model.Position;
 
-public class MinMaxAI extends AbstractAI
+public class AlphaBetaAI extends AbstractAI
 {
     private final EvaluationStrategy strategy;
     private final int limitMS;
@@ -13,7 +13,7 @@ public class MinMaxAI extends AbstractAI
     private final Cell playerColor;
     private long startTime;
 
-    public MinMaxAI(EvaluationStrategy strategy, int limitMS, int maxDepth, Cell playerColor)
+    public AlphaBetaAI(EvaluationStrategy strategy, int limitMS, int maxDepth, Cell playerColor)
     {
         this.strategy = strategy;
         this.limitMS = limitMS;
@@ -41,6 +41,10 @@ public class MinMaxAI extends AbstractAI
         Position bestMove = null;
         int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
 
+        // Initialiser alpha et beta
+        int alpha = Integer.MIN_VALUE;
+        int beta = Integer.MAX_VALUE;
+
         // Évaluer chaque coup possible
         for (Position move : validMoves) {
             // Vérifier la limite de temps
@@ -56,8 +60,8 @@ public class MinMaxAI extends AbstractAI
             Cell nextColor = color.opponent();
             newBoard.updatePossiblePlay(nextColor);
 
-            // Appeler MinMax récursivement
-            int score = minmax(newBoard, nextColor, 1, !isMaximizing);
+            // Appeler AlphaBeta récursivement
+            int score = alphabeta(newBoard, nextColor, 1, alpha, beta, !isMaximizing);
 
             // Mettre à jour le meilleur coup
             if (isMaximizing) {
@@ -65,11 +69,13 @@ public class MinMaxAI extends AbstractAI
                     bestScore = score;
                     bestMove = move;
                 }
+                alpha = Math.max(alpha, bestScore);
             } else {
                 if (score < bestScore) {
                     bestScore = score;
                     bestMove = move;
                 }
+                beta = Math.min(beta, bestScore);
             }
         }
 
@@ -77,14 +83,16 @@ public class MinMaxAI extends AbstractAI
     }
 
     /**
-     * Algorithme MinMax récursif
+     * Algorithme Alpha-Beta avec élagage
      * @param board Le plateau actuel
      * @param color La couleur du joueur actuel
      * @param depth La profondeur actuelle
+     * @param alpha La meilleure valeur pour le joueur maximisant
+     * @param beta La meilleure valeur pour le joueur minimisant
      * @param isMaximizing True si on maximise, false si on minimise
      * @return Le score du meilleur coup
      */
-    private int minmax(Board board, Cell color, int depth, boolean isMaximizing)
+    private int alphabeta(Board board, Cell color, int depth, int alpha, int beta, boolean isMaximizing)
     {
         // Vérifier la limite de temps
         if (isTimeUp()) {
@@ -112,39 +120,71 @@ public class MinMaxAI extends AbstractAI
             }
 
             // Sinon, passer le tour à l'adversaire
-            return minmax(nextBoard, nextColor, depth, !isMaximizing);
+            return alphabeta(nextBoard, nextColor, depth, alpha, beta, !isMaximizing);
         }
 
-        // Initialiser le meilleur score
-        int bestScore = isMaximizing ? Integer.MIN_VALUE : Integer.MAX_VALUE;
+        // Évaluer chaque coup possible avec élagage
+        if (isMaximizing) {
+            int maxScore = Integer.MIN_VALUE;
 
-        // Évaluer chaque coup possible
-        for (Position move : validMoves) {
-            // Vérifier la limite de temps
-            if (isTimeUp()) {
-                break;
+            for (Position move : validMoves) {
+                // Vérifier la limite de temps
+                if (isTimeUp()) {
+                    break;
+                }
+
+                // Créer une copie du plateau et jouer le coup
+                Board newBoard = board.copy();
+                newBoard.play(move.r(), move.c(), color);
+
+                // Préparer le tour suivant
+                Cell nextColor = color.opponent();
+                newBoard.updatePossiblePlay(nextColor);
+
+                // Appel récursif
+                int score = alphabeta(newBoard, nextColor, depth + 1, alpha, beta, false);
+
+                maxScore = Math.max(maxScore, score);
+                alpha = Math.max(alpha, score);
+
+                // Élagage Beta (Beta cut-off)
+                if (beta <= alpha) {
+                    break; // Coupe Beta
+                }
             }
 
-            // Créer une copie du plateau et jouer le coup
-            Board newBoard = board.copy();
-            newBoard.play(move.r(), move.c(), color);
+            return maxScore;
+        } else {
+            int minScore = Integer.MAX_VALUE;
 
-            // Préparer le tour suivant
-            Cell nextColor = color.opponent();
-            newBoard.updatePossiblePlay(nextColor);
+            for (Position move : validMoves) {
+                // Vérifier la limite de temps
+                if (isTimeUp()) {
+                    break;
+                }
 
-            // Appel récursif
-            int score = minmax(newBoard, nextColor, depth + 1, !isMaximizing);
+                // Créer une copie du plateau et jouer le coup
+                Board newBoard = board.copy();
+                newBoard.play(move.r(), move.c(), color);
 
-            // Mettre à jour le meilleur score
-            if (isMaximizing) {
-                bestScore = Math.max(bestScore, score);
-            } else {
-                bestScore = Math.min(bestScore, score);
+                // Préparer le tour suivant
+                Cell nextColor = color.opponent();
+                newBoard.updatePossiblePlay(nextColor);
+
+                // Appel récursif
+                int score = alphabeta(newBoard, nextColor, depth + 1, alpha, beta, true);
+
+                minScore = Math.min(minScore, score);
+                beta = Math.min(beta, score);
+
+                // Élagage Alpha (Alpha cut-off)
+                if (beta <= alpha) {
+                    break; // Coupe Alpha
+                }
             }
+
+            return minScore;
         }
-
-        return bestScore;
     }
 
     /**

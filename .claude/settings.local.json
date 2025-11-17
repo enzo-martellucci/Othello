@@ -10,7 +10,10 @@
       "Bash(git commit:*)",
       "Bash(tree:*)",
       "Bash(nul)",
-      "Bash(cat:*)"
+      "Bash(cat:*)",
+      "Bash(java:*)",
+      "Bash(echo:*)",
+      "Bash(./mvnw compile:*)"
     ],
     "deny": [],
     "ask": []
