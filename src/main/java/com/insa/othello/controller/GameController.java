@@ -46,7 +46,7 @@ public class GameController implements Initializable {
                 final int row = r, col = c;
                 Button btn = new Button();
                 btn.getStyleClass().add("game-button");
-                btn.setOnAction(_ -> this.play(row, col));
+                btn.setOnAction(e -> this.play(row, col));
 
                 this.buttons[r][c] = btn;
                 this.gridPane.add(btn, c, r);

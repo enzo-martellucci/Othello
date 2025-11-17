@@ -23,7 +23,7 @@ public abstract class AbstractAI extends Service<Position> implements AI
     protected Cell color;
 
     public AbstractAI() {
-        this.setOnFailed(_ -> {
+        this.setOnFailed(e -> {
             Throwable exception = AbstractAI.this.getException();
             System.err.println("AI error : " + exception.getMessage());
             exception.printStackTrace();
@@ -35,7 +35,7 @@ public abstract class AbstractAI extends Service<Position> implements AI
         return switch (playerType) {
             case MIN_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor);
             case MIN_MAX_ALPHA_BETA -> new AlphaBetaAI(strategy, limitMS, maxDepth, playerColor);
-            case NEGA_MAX -> new MinMaxAI(strategy, limitMS, maxDepth, playerColor); // TODO: Implémenter NegaMax
+            case NEGA_MAX -> new NegaMaxAI(strategy, limitMS, maxDepth, playerColor);
             case HUMAN -> null;
         };
     }
@@ -44,7 +44,7 @@ public abstract class AbstractAI extends Service<Position> implements AI
     public void search(Board board, Cell color, Consumer<Position> callback) {
         this.board = board;
         this.color = color;
-        this.setOnSucceeded(_ -> callback.accept(this.getValue()));
+        this.setOnSucceeded(e -> callback.accept(this.getValue()));
 
         if (this.getState() == State.READY)
             this.start();
